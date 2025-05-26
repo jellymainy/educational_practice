@@ -57,12 +57,33 @@ bool isDraw() {
     return true;
 }
 
+// Проверка вводимого числа
+int getValidSymbol(int min, int max) {
+    int symbol;
+    while (true) {
+        cout << "Введите число: ";
+        cin >> symbol;
+        cout << endl;
+        if (cin.fail()) { // Проверяем, если ввод некорректный
+            cin.clear();  // Сбрасываем состояние ошибки
+            cin.ignore(1000, '\n'); // Очищаем буфер ввода
+            cout << "Ошибка! Введите число от " << min << " до " << max << "." << endl;
+        }
+        else if (symbol >= min && symbol <= max) {
+            return symbol; // Корректный ввод
+        }
+        else {
+            cout << "Ошибка! Введите корректное число." << endl;
+        }
+    }
+}
+
 // Ход игрока
 void playerMove(char player) {
     while (true) {
         int move;
         cout << "Игрок " << player << ", выберите номер клетки (1-9): " << endl;
-        cin >> move; // Получение ввода от игрока
+        move = getValidSymbol(1, 9); // Получение ввода от игрока
         if (move >= 1 && move <= 9) {
             int x = (move - 1) / SIZE; // Вычисление координат по введенному номеру клетки
             int y = (move - 1) % SIZE;
@@ -146,7 +167,7 @@ int main() {
         << "2 - Игрок против компьютера" << endl << endl;
 
     int mode; // Выбор режима игры
-    cin >> mode;
+    mode = getValidSymbol(1, 2);
 
     playGame(mode == 2); // Запуск игры в выбранном режиме
 
