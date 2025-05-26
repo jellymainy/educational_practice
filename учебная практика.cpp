@@ -97,45 +97,45 @@ void playerMove(char player) {
 }
 
 // Ход компьютера (рандомный выбор клетки)
-void randomMove() {
+void randomMove(char computerSymbol) {
     while (true) {
         int move = rand() % 9 + 1; // Случайное число от 1 до 9
         int x = (move - 1) / SIZE;
         int y = (move - 1) % SIZE;
         if (board[x][y] != 'X' && board[x][y] != 'O') { // Проверка свободности клетки
-            board[x][y] = 'O';
+            board[x][y] = computerSymbol;
             break;
         }
     }
 }
 
 // Ход компьютера (блокировка выигрыша игрока)
-void computerMove() {
+void computerMove(char computerSymbol) {
     cout << "Ход компьютера: " << endl;
     for (int i = 0; i < SIZE; ++i) {
         for (int j = 0; j < SIZE; ++j) {
             if (board[i][j] != 'X' && board[i][j] != 'O') {
                 board[i][j] = 'X';
                 if (checkWin('X')) { // Если игрок мог выиграть этим ходом, заблокируем его
-                    board[i][j] = 'O';
+                    board[i][j] = computerSymbol;
                     return;
                 }
                 board[i][j] = '1' + i * SIZE + j; // Откат изменений
             }
         }
     }
-    randomMove(); // Если не найден опасный ход, делаем случайный
+    randomMove(computerSymbol); // Если не найден опасный ход, делаем случайный
 }
 
 // Основной игровой процесс
-void playGame(bool againstComputer) {
+void playGame(bool againstComputer, char playerSymbol, char computerSymbol) {
     char currentPlayer = 'X'; // Начинает игрок 'X'
     initBoard();
 
     while (true) {
         printBoard();
-        if (againstComputer && currentPlayer == 'O') {
-            computerMove(); // Ход компьютера
+        if (againstComputer && currentPlayer == computerSymbol) {
+            computerMove(computerSymbol); // Ход компьютера
         }
         else {
             playerMove(currentPlayer); // Ход игрока
@@ -169,7 +169,13 @@ int main() {
     int mode; // Выбор режима игры
     mode = getValidSymbol(1, 2);
 
-    playGame(mode == 2); // Запуск игры в выбранном режиме
+    cout << "Выберите ваш символ:" << endl
+        << "1 - X" << endl
+        << "2 - O" << endl << endl;
+    char playerSymbol = (getValidSymbol(1, 2) == 1) ? 'X' : 'O';
+    char computerSymbol = (playerSymbol == 'X') ? 'O' : 'X';
+
+    playGame(mode == 2, playerSymbol, computerSymbol); // Запуск игры в выбранном режиме
 
     return 0;
 }
