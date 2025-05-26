@@ -75,8 +75,8 @@ void playerMove(char player) {
     }
 }
 
-// Ход компьютера
-void computerMove() {
+// Ход компьютера (рандомный выбор клетки)
+void randomMove() {
     while (true) {
         int move = rand() % 9 + 1; // Случайное число от 1 до 9
         int x = (move - 1) / SIZE;
@@ -86,6 +86,24 @@ void computerMove() {
             break;
         }
     }
+}
+
+// Ход компьютера (блокировка выигрыша игрока)
+void computerMove() {
+    cout << "Ход компьютера: " << endl;
+    for (int i = 0; i < SIZE; ++i) {
+        for (int j = 0; j < SIZE; ++j) {
+            if (board[i][j] != 'X' && board[i][j] != 'O') {
+                board[i][j] = 'X';
+                if (checkWin('X')) { // Если игрок мог выиграть этим ходом, заблокируем его
+                    board[i][j] = 'O';
+                    return;
+                }
+                board[i][j] = '1' + i * SIZE + j; // Откат изменений
+            }
+        }
+    }
+    randomMove(); // Если не найден опасный ход, делаем случайный
 }
 
 // Основной игровой процесс
