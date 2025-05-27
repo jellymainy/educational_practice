@@ -143,12 +143,12 @@ void playGame(bool againstComputer, char playerSymbol, char computerSymbol) {
 
         if (checkWin(currentPlayer)) { // Проверка победы
             printBoard();
-            cout << "Игрок " << currentPlayer << " победил!" << endl;
+            cout << "Игрок " << currentPlayer << " победил!" << endl << endl;
             return;
         }
         else if (isDraw()) { // Проверка на ничью
             printBoard();
-            cout << "Ничья!" << endl;
+            cout << "Ничья!" << endl << endl;
             return;
         }
 
@@ -161,21 +161,29 @@ int main() {
     setlocale(LC_ALL, "RU"); // Настройка кириллицы для консоли
     srand(time(0)); // Инициализация генератора случайных чисел
 
-    cout << "Добро пожаловать в игру Крестики-Нолики!" << endl << endl
-        << "Выберите режим игры:" << endl
-        << "1 - Игрок против игрока" << endl
-        << "2 - Игрок против компьютера" << endl << endl;
+    bool game = true;
+    while (game) {
+        cout << "Добро пожаловать в игру Крестики-Нолики!" << endl << endl
+            << "Выберите режим игры:" << endl
+            << "1 - Игрок против игрока" << endl
+            << "2 - Игрок против компьютера" << endl << endl;
 
-    int mode; // Выбор режима игры
-    mode = getValidSymbol(1, 2);
+        int mode; // Выбор режима игры
+        mode = getValidSymbol(1, 2);
 
-    cout << "Выберите ваш символ:" << endl
-        << "1 - X" << endl
-        << "2 - O" << endl << endl;
-    char playerSymbol = (getValidSymbol(1, 2) == 1) ? 'X' : 'O';
-    char computerSymbol = (playerSymbol == 'X') ? 'O' : 'X';
+        cout << "Выберите ваш символ:" << endl
+            << "1 - X" << endl
+            << "2 - O" << endl << endl;
+        char playerSymbol = (getValidSymbol(1, 2) == 1) ? 'X' : 'O';
+        char computerSymbol = (playerSymbol == 'X') ? 'O' : 'X';
 
-    playGame(mode == 2, playerSymbol, computerSymbol); // Запуск игры в выбранном режиме
-
+        playGame(mode == 2, playerSymbol, computerSymbol); // Запуск игры в выбранном режиме
+        cout << "Хотите продолжить игру?" << endl
+            << "1 - Продолжить" << endl
+            << "2 - Выход" << endl << endl;
+        int exit = getValidSymbol(1,2);
+        game = (exit == 1) ? true : false;
+    }
+    cout << "Выход из игры." << endl;
     return 0;
 }
